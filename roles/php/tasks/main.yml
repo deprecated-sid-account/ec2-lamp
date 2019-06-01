@@ -1,0 +1,35 @@
+---
+# tasks file for php
+#- name: yum update
+#  action: yum name=* state=latest
+#- name: Add EPEL repository
+#  yum_repository:
+#    name: epel
+#    description: EPEL YUM repo
+#    baseurl: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#- name: download remi repo rpm
+#  get_url: url=http://rpms.famillecollet.com/enterprise/remi-release-7.rpm dest=/root/  
+#- name: install remi repo rpm
+#  yum: name=/root/remi-release-7.rpm state=present
+#- name: install php
+#  yum: enablerepo=remi,remi-php56 name=php-mssqlnd,php-pear,php,php-pdo,php-pecl-apcu,php-xml,php-pecl-zip,php-pecl-jsonc,php-pecl-igbinary,httpd,httpd-tools,php-mbstring,php-imap,php-opcache state=latest
+- name: Install PHP 7 with the most common packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - php
+    - php-gd
+    - php-mbstring
+    - php-mysqlnd
+    - php-pdo
+    - php-pecl-memcache
+#We need to create a role to uninstall httpd as when PHP will be installed it will try to install httpd24 which is same as httpd which will result in ansible giving us an error
+  notify: restart Apache
+- name: Upload index.php file to the remote web directoty
+  copy:
+    src: index.php
+    dest: /var/www/html
+    owner: ec2-user
+    group: ec2-user
+
