@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+ # tasks:
+ #   - name: Install Apache2 web server
+ #     yum: 
+ #       name: httpd
+ #       state: present #present/absent
+
+ #  - name: Ensure Apache2 is up and running and will autostart on system boot 
+ #     service: 
+ #       name: httpd
+ #       state: started #started/stopped/restarted
+ #       enabled: true   #enabled ensures if it has started on restart or not. Since amazon linux is RPM based, enabled will use chkconfig to check
+  roles: 
+    - Apache
+    - php
